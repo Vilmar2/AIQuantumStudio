@@ -131,6 +131,60 @@ async function sendNotificationEmail(to: string, subject: string, text: string, 
   return { success: false };
 }
 
+// Helper: Escape HTML characters for Telegram HTML parse_mode
+function escapeHtml(text: string): string {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Helper: Send notification via official Telegram Bot HTTP API
+async function sendTelegramNotification(text: string): Promise<{ success: boolean; data?: any; error?: any; warning?: string }> {
+  console.log(`\n================== [NOTIFICACIÓN TELEGRAM (DEV)] ==================`);
+  console.log(text);
+  console.log(`===================================================================\n`);
+
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    const warning = '[TELEGRAM DEV] TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configuradas en entorno local. Notificación emitida en consola.';
+    console.warn(warning);
+    return { success: false, warning };
+  }
+
+  try {
+    const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    const res = await fetch(telegramUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      console.log(`[TELEGRAM ÉXITO] Notificación enviada a chat_id: ${chatId}. Message ID: ${data.result?.message_id}`);
+      return { success: true, data };
+    } else {
+      console.error(`[TELEGRAM ERROR] Código ${res.status}:`, data);
+      return { success: false, error: data };
+    }
+  } catch (err: any) {
+    console.error(`[TELEGRAM EXCEPCIÓN]:`, err);
+    return { success: false, error: err.message || String(err) };
+  }
+}
+
 // Helper: Hash password
 function hashPassword(password: string, salt: string): string {
   return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
@@ -573,8 +627,34 @@ async function startServer() {
 
       purchaseOrders.set(orderId, newOrder);
 
-      // Notificación administrativa a aiquantumstudio@gmail.com
+      // Formateo de fecha y hora local Argentina
+      const dateFormatted = new Date(now).toLocaleString('es-AR', {
+        timeZone: 'America/Argentina/Buenos_Aires',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
       const priceText = method === 'Personal Pay' ? '$3.300 ARS' : 'USD 2';
+
+      // 1. Notificación instantánea a Telegram (Canal principal para el administrador)
+      const telegramText = `🔔 <b>NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA</b>
+
+👤 <b>Nombre:</b> ${escapeHtml(newOrder.name)}
+📧 <b>Email:</b> ${escapeHtml(newOrder.email)}
+💳 <b>Método de pago:</b> ${escapeHtml(newOrder.payment_method)}
+💰 <b>Precio:</b> ${priceText}
+📦 <b>Producto:</b> Dividí Mesa
+🕐 <b>Fecha y hora:</b> ${dateFormatted}
+🔴 <b>Estado:</b> PENDIENTE DE VERIFICACIÓN
+
+⚠️ <i>La solicitud fue recibida. El acceso todavía NO está activado. Verificá manualmente el pago en Personal Pay o Binance antes de activarlo desde el Panel de Órdenes.</i>`;
+
+      const telegramResult = await sendTelegramNotification(telegramText);
+
+      // 2. Notificación complementaria por Email (Resend)
       const notificationText = `NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA
 
 Cliente:
@@ -596,34 +676,56 @@ Estado:
 PENDIENTE DE VERIFICACIÓN
 
 Fecha:
-${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
+${dateFormatted}
 `;
 
-      const resendResult = await sendNotificationEmail(
-        'aiquantumstudio@gmail.com',
-        'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
-        notificationText
-      );
-
-      if (!resendResult.success) {
-        console.error('[PURCHASE ORDER ERROR] Resend no confirmó el envío:', resendResult);
-        return res.status(502).json({
-          success: false,
-          error: `Resend no confirmó el envío del correo de notificación: ${resendResult.warning || 'Error de conexión con Resend'}`,
-          resendDetails: resendResult,
-        });
+      let resendResult: any = { success: false, warning: 'NO_EJECUTADO' };
+      try {
+        resendResult = await sendNotificationEmail(
+          'aiquantumstudio@gmail.com',
+          'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
+          notificationText
+        );
+      } catch (err: any) {
+        console.error('[RESEND DISPATCH ERROR]', err);
+        resendResult = { success: false, error: err.message };
       }
 
       return res.status(201).json({
         success: true,
         order: newOrder,
-        resend: resendResult,
-        message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN y confirmada por Resend.',
+        telegram: {
+          sent: telegramResult.success,
+          warning: telegramResult.warning,
+        },
+        resend: {
+          sent: resendResult.success,
+        },
+        message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN.',
       });
     } catch (err: any) {
       console.error('Error creating purchase order:', err);
       return res.status(500).json({ error: 'Error interno al registrar la compra.' });
     }
+  });
+
+  // GET or POST /api/telegram-test (Prueba directa de Telegram para el administrador)
+  app.all('/api/telegram-test', async (_req: Request, res: Response) => {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    const testMessage = `🧪 <b>PRUEBA DE TELEGRAM — AI QUANTUM STUDIO</b>\n\nTelegram funcionando correctamente.`;
+    const testResult = await sendTelegramNotification(testMessage);
+
+    return res.json({
+      server_time: new Date().toISOString(),
+      telegram_configured: !!(botToken && chatId),
+      bot_token_present: !!botToken,
+      bot_token_masked: botToken ? `${botToken.substring(0, 6)}...${botToken.substring(botToken.length - 4)} (longitud: ${botToken.length})` : 'NO_CONFIGURADO',
+      chat_id_present: !!chatId,
+      chat_id_masked: chatId ? `${chatId.substring(0, 3)}*** (longitud: ${chatId.length})` : 'NO_CONFIGURADO',
+      test_result: testResult,
+    });
   });
 
   // GET /api/resend-diagnostics

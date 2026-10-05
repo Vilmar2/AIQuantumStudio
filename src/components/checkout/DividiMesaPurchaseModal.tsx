@@ -141,7 +141,7 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
                 Estamos verificando el pago ingresado por <strong>{selectedMethod}</strong>.
               </p>
               <p className="text-emerald-400 font-semibold">
-                Una vez confirmado, vas a recibir un email en <span className="underline">{email}</span> con tu acceso directo y habilitado.
+                Una vez confirmado, recibirás tu acceso directo.
               </p>
             </div>
 

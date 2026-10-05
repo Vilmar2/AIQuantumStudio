@@ -142,6 +142,60 @@ async function sendResendEmail({
   return { success: false, error: lastError };
 }
 
+// Helper: Escape HTML characters for Telegram HTML parse_mode
+function escapeHtml(text: string): string {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Helper: Send notification via official Telegram Bot HTTP API
+async function sendTelegramNotification(text: string): Promise<{ success: boolean; data?: any; error?: any; warning?: string }> {
+  console.log(`\n================== [NOTIFICACIÓN TELEGRAM (NETLIFY)] ==================`);
+  console.log(text);
+  console.log(`=======================================================================\n`);
+
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    const warning = '[TELEGRAM NETLIFY] TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configuradas en Netlify. Se registró en los logs.';
+    console.warn(warning);
+    return { success: false, warning };
+  }
+
+  try {
+    const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    const res = await fetch(telegramUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      console.log(`[TELEGRAM ÉXITO] Notificación enviada a chat_id: ${chatId}. Message ID: ${data.result?.message_id}`);
+      return { success: true, data };
+    } else {
+      console.error(`[TELEGRAM ERROR] Código ${res.status}:`, data);
+      return { success: false, error: data };
+    }
+  } catch (err: any) {
+    console.error(`[TELEGRAM EXCEPCIÓN]:`, err);
+    return { success: false, error: err.message || String(err) };
+  }
+}
+
 // Serverless Handler for Netlify
 export const handler = async (event: any, _context: any) => {
   const headers = {
@@ -170,6 +224,31 @@ export const handler = async (event: any, _context: any) => {
   console.log(`[NETLIFY API] ${event.httpMethod} ${rawPath} -> ${cleanPath}`);
 
   try {
+    // -------------------------------------------------------------
+    // GET or POST /telegram-test (Prueba directa de Telegram para el administrador)
+    // -------------------------------------------------------------
+    if ((event.httpMethod === 'GET' || event.httpMethod === 'POST') && cleanPath === '/telegram-test') {
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+
+      const testMessage = `🧪 <b>PRUEBA DE TELEGRAM — AI QUANTUM STUDIO</b>\n\nTelegram funcionando correctamente.`;
+      const testResult = await sendTelegramNotification(testMessage);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          server_time: new Date().toISOString(),
+          telegram_configured: !!(botToken && chatId),
+          bot_token_present: !!botToken,
+          bot_token_masked: botToken ? `${botToken.substring(0, 6)}...${botToken.substring(botToken.length - 4)} (longitud: ${botToken.length})` : 'NO_CONFIGURADO',
+          chat_id_present: !!chatId,
+          chat_id_masked: chatId ? `${chatId.substring(0, 3)}*** (longitud: ${chatId.length})` : 'NO_CONFIGURADO',
+          test_result: testResult,
+        }),
+      };
+    }
+
     // -------------------------------------------------------------
     // GET /resend-diagnostics (Comprobación en vivo del estado de Resend)
     // -------------------------------------------------------------
@@ -243,8 +322,34 @@ export const handler = async (event: any, _context: any) => {
       orders.unshift(newOrder);
       saveOrders(orders);
 
-      // Notificación administrativa a aiquantumstudio@gmail.com
+      // Formateo de fecha y hora local Argentina
+      const dateFormatted = new Date(now).toLocaleString('es-AR', {
+        timeZone: 'America/Argentina/Buenos_Aires',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
       const priceText = method === 'Personal Pay' ? '$3.300 ARS' : 'USD 2';
+
+      // 1. Notificación a Telegram (Canal principal instantáneo)
+      const telegramText = `🔔 <b>NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA</b>
+
+👤 <b>Nombre:</b> ${escapeHtml(newOrder.name)}
+📧 <b>Email:</b> ${escapeHtml(newOrder.email)}
+💳 <b>Método de pago:</b> ${escapeHtml(newOrder.payment_method)}
+💰 <b>Precio:</b> ${priceText}
+📦 <b>Producto:</b> Dividí Mesa
+🕐 <b>Fecha y hora:</b> ${dateFormatted}
+🔴 <b>Estado:</b> PENDIENTE DE VERIFICACIÓN
+
+⚠️ <i>La solicitud fue recibida. El acceso todavía NO está activado. Verificá manualmente el pago en Personal Pay o Binance antes de activarlo desde el Panel de Órdenes.</i>`;
+
+      const telegramResult = await sendTelegramNotification(telegramText);
+
+      // 2. Notificación por Resend (Canal complementario, no bloqueante)
       const notificationText = `NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA
 
 Cliente:
@@ -266,7 +371,7 @@ Estado:
 PENDIENTE DE VERIFICACIÓN
 
 Fecha:
-${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
+${dateFormatted}
 `;
 
       const adminHtml = `
@@ -294,25 +399,17 @@ ${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Ai
 </div>
 `;
 
-      const resendResult = await sendResendEmail({
-        to: 'aiquantumstudio@gmail.com',
-        subject: 'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
-        text: notificationText,
-        html: adminHtml,
-      });
-
-      // Validar estrictamente la confirmación de Resend
-      if (!resendResult.success) {
-        console.error('[PURCHASE ORDER ERROR] Resend no confirmó el envío:', resendResult);
-        return {
-          statusCode: 502,
-          headers,
-          body: JSON.stringify({
-            success: false,
-            error: `Resend no confirmó el envío del correo de notificación: ${resendResult.error?.message || resendResult.warning || JSON.stringify(resendResult.error)}`,
-            resendDetails: resendResult,
-          }),
-        };
+      let resendResult: any = { success: false, warning: 'NO_EJECUTADO' };
+      try {
+        resendResult = await sendResendEmail({
+          to: 'aiquantumstudio@gmail.com',
+          subject: 'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
+          text: notificationText,
+          html: adminHtml,
+        });
+      } catch (err: any) {
+        console.error('[RESEND DISPATCH ERROR]', err);
+        resendResult = { success: false, error: err.message };
       }
 
       return {
@@ -321,8 +418,14 @@ ${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Ai
         body: JSON.stringify({
           success: true,
           order: newOrder,
-          resend: resendResult,
-          message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN y confirmada por Resend.',
+          telegram: {
+            sent: telegramResult.success,
+            warning: telegramResult.warning,
+          },
+          resend: {
+            sent: resendResult.success,
+          },
+          message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN.',
         }),
       };
     }
