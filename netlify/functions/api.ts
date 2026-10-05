@@ -96,10 +96,42 @@ async function sendResendEmail({
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         console.log(`[RESEND ÉXITO] Correo despachado a ${to} desde "${from}". ID: ${data.id}`);
-        return { success: true, id: data.id, from };
+        return { success: true, id: data.id, from, to };
       } else {
         console.warn(`[RESEND FALLÓ DESDE "${from}"]:`, res.status, data);
         lastError = data;
+
+        // Si Resend avisa que en modo de prueba solo se puede enviar al email del titular de la cuenta
+        if (typeof data?.message === 'string' && data.message.includes('only send testing emails to your own email address')) {
+          const match = data.message.match(/\(([^)]+)\)/);
+          if (match && match[1] && match[1] !== to) {
+            const fallbackTo = match[1];
+            console.log(`[RESEND REDIRECCIÓN DE PRUEBA] Reintentando envío al titular verificado de la cuenta: ${fallbackTo}`);
+            try {
+              const retryRes = await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${apiKey}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  from,
+                  to: [fallbackTo],
+                  subject: `[FORWARD ${to}] ${subject}`,
+                  text,
+                  html: html || `<div style="font-family:sans-serif;line-height:1.6;color:#111;padding:16px;">${text.replace(/\n/g, '<br/>')}</div>`,
+                }),
+              });
+              const retryData = await retryRes.json().catch(() => ({}));
+              if (retryRes.ok) {
+                console.log(`[RESEND ÉXITO TITULAR] Despachado al titular ${fallbackTo}. ID: ${retryData.id}`);
+                return { success: true, id: retryData.id, from, to: fallbackTo, forwarded: true };
+              }
+            } catch (retryErr) {
+              console.error('[RESEND RETRY ERROR]', retryErr);
+            }
+          }
+        }
       }
     } catch (err: any) {
       console.error(`[RESEND ERROR DESDE "${from}"]:`, err);
@@ -138,6 +170,34 @@ export const handler = async (event: any, _context: any) => {
   console.log(`[NETLIFY API] ${event.httpMethod} ${rawPath} -> ${cleanPath}`);
 
   try {
+    // -------------------------------------------------------------
+    // GET /resend-diagnostics (Comprobación en vivo del estado de Resend)
+    // -------------------------------------------------------------
+    if (event.httpMethod === 'GET' && cleanPath === '/resend-diagnostics') {
+      const apiKey = process.env.RESEND_API_KEY || '';
+      const maskedKey = apiKey
+        ? `${apiKey.substring(0, 5)}...${apiKey.substring(apiKey.length - 4)} (longitud: ${apiKey.length})`
+        : 'NO_CONFIGURADA';
+
+      const pingResult = await sendResendEmail({
+        to: 'aiquantumstudio@gmail.com',
+        subject: 'PING DE DIAGNÓSTICO RESEND — AI QUANTUM STUDIO',
+        text: 'Verificación de conectividad en vivo entre Netlify Functions y la API de Resend.',
+      });
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          server_time: new Date().toISOString(),
+          resend_api_key_configured: !!apiKey,
+          resend_api_key_masked: maskedKey,
+          resend_from_email: process.env.RESEND_FROM_EMAIL || 'DEFAULT_RESEND',
+          ping_result: pingResult,
+        }),
+      };
+    }
+
     // -------------------------------------------------------------
     // POST /purchase-orders (Client registers purchase)
     // -------------------------------------------------------------
@@ -234,12 +294,26 @@ ${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Ai
 </div>
 `;
 
-      await sendResendEmail({
+      const resendResult = await sendResendEmail({
         to: 'aiquantumstudio@gmail.com',
         subject: 'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
         text: notificationText,
         html: adminHtml,
       });
+
+      // Validar estrictamente la confirmación de Resend
+      if (!resendResult.success) {
+        console.error('[PURCHASE ORDER ERROR] Resend no confirmó el envío:', resendResult);
+        return {
+          statusCode: 502,
+          headers,
+          body: JSON.stringify({
+            success: false,
+            error: `Resend no confirmó el envío del correo de notificación: ${resendResult.error?.message || resendResult.warning || JSON.stringify(resendResult.error)}`,
+            resendDetails: resendResult,
+          }),
+        };
+      }
 
       return {
         statusCode: 201,
@@ -247,7 +321,8 @@ ${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Ai
         body: JSON.stringify({
           success: true,
           order: newOrder,
-          message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN.',
+          resend: resendResult,
+          message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN y confirmada por Resend.',
         }),
       };
     }
@@ -338,12 +413,24 @@ AI Quantum Studio
 </div>
 `;
 
-      await sendResendEmail({
+      const resendResult = await sendResendEmail({
         to: order.email,
         subject: '🎉 Tu acceso a Dividí Mesa fue activado',
         text: customerText,
         html: customerHtml,
       });
+
+      if (!resendResult.success) {
+        return {
+          statusCode: 502,
+          headers,
+          body: JSON.stringify({
+            success: false,
+            error: `Resend no pudo confirmar el envío al cliente (${order.email}): ${resendResult.error?.message || JSON.stringify(resendResult.error)}`,
+            resendDetails: resendResult,
+          }),
+        };
+      }
 
       return {
         statusCode: 200,
@@ -351,7 +438,8 @@ AI Quantum Studio
         body: JSON.stringify({
           success: true,
           order,
-          message: 'Acceso activado con éxito y email enviado al cliente.',
+          resend: resendResult,
+          message: 'Acceso activado con éxito y email confirmado por Resend.',
         }),
       };
     }

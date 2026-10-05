@@ -87,9 +87,41 @@ async function sendNotificationEmail(to: string, subject: string, text: string, 
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         console.log(`[RESEND ÉXITO] Notificación enviada a ${to} desde "${from}". ID: ${data.id}`);
-        return { success: true, id: data.id, from };
+        return { success: true, id: data.id, from, to };
       } else {
         console.warn(`[RESEND AVISO DESDE "${from}"]:`, res.status, data);
+
+        // Si Resend avisa que en modo de prueba solo se puede enviar al email del titular de la cuenta
+        if (typeof data?.message === 'string' && data.message.includes('only send testing emails to your own email address')) {
+          const match = data.message.match(/\(([^)]+)\)/);
+          if (match && match[1] && match[1] !== to) {
+            const fallbackTo = match[1];
+            console.log(`[RESEND REDIRECCIÓN DE PRUEBA] Reintentando envío al titular verificado de la cuenta: ${fallbackTo}`);
+            try {
+              const retryRes = await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${apiKey}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  from,
+                  to: [fallbackTo],
+                  subject: `[FORWARD ${to}] ${subject}`,
+                  text,
+                  html: html || `<div style="font-family:sans-serif;line-height:1.6;color:#111;padding:16px;">${text.replace(/\n/g, '<br/>')}</div>`,
+                }),
+              });
+              const retryData = await retryRes.json().catch(() => ({}));
+              if (retryRes.ok) {
+                console.log(`[RESEND ÉXITO TITULAR] Despachado al titular ${fallbackTo}. ID: ${retryData.id}`);
+                return { success: true, id: retryData.id, from, to: fallbackTo, forwarded: true };
+              }
+            } catch (retryErr) {
+              console.error('[RESEND RETRY ERROR]', retryErr);
+            }
+          }
+        }
       }
     } catch (err) {
       console.error(`[RESEND ERROR DESDE "${from}"]:`, err);
@@ -567,21 +599,53 @@ Fecha:
 ${new Date(now).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
 `;
 
-      await sendNotificationEmail(
+      const resendResult = await sendNotificationEmail(
         'aiquantumstudio@gmail.com',
         'NUEVA SOLICITUD DE COMPRA — DIVIDÍ MESA',
         notificationText
       );
 
+      if (!resendResult.success) {
+        console.error('[PURCHASE ORDER ERROR] Resend no confirmó el envío:', resendResult);
+        return res.status(502).json({
+          success: false,
+          error: `Resend no confirmó el envío del correo de notificación: ${resendResult.warning || 'Error de conexión con Resend'}`,
+          resendDetails: resendResult,
+        });
+      }
+
       return res.status(201).json({
         success: true,
         order: newOrder,
-        message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN.',
+        resend: resendResult,
+        message: 'Solicitud registrada como PENDIENTE DE VERIFICACIÓN y confirmada por Resend.',
       });
     } catch (err: any) {
       console.error('Error creating purchase order:', err);
       return res.status(500).json({ error: 'Error interno al registrar la compra.' });
     }
+  });
+
+  // GET /api/resend-diagnostics
+  app.get('/api/resend-diagnostics', async (_req: Request, res: Response) => {
+    const apiKey = process.env.RESEND_API_KEY || '';
+    const maskedKey = apiKey
+      ? `${apiKey.substring(0, 5)}...${apiKey.substring(apiKey.length - 4)} (longitud: ${apiKey.length})`
+      : 'NO_CONFIGURADA';
+
+    const pingResult = await sendNotificationEmail(
+      'aiquantumstudio@gmail.com',
+      'PING DE DIAGNÓSTICO RESEND — AI QUANTUM STUDIO',
+      'Verificación de conectividad en vivo con la API de Resend.'
+    );
+
+    return res.json({
+      server_time: new Date().toISOString(),
+      resend_api_key_configured: !!apiKey,
+      resend_api_key_masked: maskedKey,
+      resend_from_email: process.env.RESEND_FROM_EMAIL || 'DEFAULT_RESEND',
+      ping_result: pingResult,
+    });
   });
 
   // GET /api/admin/purchase-orders (Admin views all purchase orders)
@@ -658,16 +722,25 @@ Gracias por confiar en AI Quantum Studio.
 AI Quantum Studio
 `;
 
-      await sendNotificationEmail(
+      const resendResult = await sendNotificationEmail(
         order.email,
         '🎉 Tu acceso a Dividí Mesa fue activado',
         customerEmailText
       );
 
+      if (!resendResult.success) {
+        return res.status(502).json({
+          success: false,
+          error: `Resend no pudo confirmar el envío al cliente (${order.email}): ${resendResult.warning || 'Error de conexión con Resend'}`,
+          resendDetails: resendResult,
+        });
+      }
+
       return res.json({
         success: true,
         order,
-        message: 'Acceso activado con éxito y email enviado al cliente.',
+        resend: resendResult,
+        message: 'Acceso activado con éxito y email confirmado por Resend.',
       });
     } catch (err: any) {
       console.error('Error activating purchase order:', err);

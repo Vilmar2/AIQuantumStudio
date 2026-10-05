@@ -140,7 +140,7 @@ function MainAppContent() {
       <Footer onNavigate={(tab) => handleNavigate(tab)} />
 
       {/* Floating Bespoke WhatsApp Button */}
-      <FloatingWhatsAppButton />
+      <FloatingWhatsAppButton currentTab={currentTab} />
 
       {/* Global Solution / Consultation Modal */}
       <SolutionModal
