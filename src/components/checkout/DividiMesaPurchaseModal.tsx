@@ -9,7 +9,8 @@ import {
   ArrowRight, 
   CreditCard,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  MessageCircle
 } from 'lucide-react';
 import { DIVIDI_MESA_PRICE } from '../../config/pricing';
 import qrPersonalPay from '../../assets/images/qr-personal-pay.png';
@@ -20,6 +21,8 @@ interface DividiMesaPurchaseModalProps {
   onClose: () => void;
 }
 
+const WHATSAPP_NUMBER = '5493412852228';
+
 export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = ({
   isOpen,
   onClose,
@@ -29,9 +32,9 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
   const [email, setEmail] = useState('');
   const [copiedAlias, setCopiedAlias] = useState(false);
   const [activeQrViewer, setActiveQrViewer] = useState<'personal' | 'binance' | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   if (!isOpen) return null;
 
@@ -41,7 +44,21 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
     setTimeout(() => setCopiedAlias(false), 2500);
   };
 
-  const handleSubmitPayment = async (e: React.FormEvent) => {
+  const generateWhatsAppMessage = (clientName: string, clientEmail: string, method: string) => {
+    const message = `🛒 SOLICITUD DE ACCESO — DIVIDÍ MESA
+
+👤 Nombre: ${clientName.trim()}
+📧 Email: ${clientEmail.trim().toLowerCase()}
+💳 Método de pago: ${method}
+💰 Precio: $3.300 ARS
+📦 Producto: Dividí Mesa
+
+Solicito la activación de mi acceso a Dividí Mesa.`;
+
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  };
+
+  const handleSubmitPayment = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -54,44 +71,34 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
       return;
     }
 
+    const waLink = generateWhatsAppMessage(name, email, selectedMethod);
+    setWhatsappUrl(waLink);
+
+    // Registro de respaldo local sin dependencias externas
     try {
-      setIsSubmitting(true);
-      const res = await fetch('/api/purchase-orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          payment_method: selectedMethod,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Error al procesar la solicitud.');
-      }
-
-      // Backup local persistente para máxima sincronización en entornos serverless/Netlify
-      if (data.order) {
-        try {
-          const stored = JSON.parse(localStorage.getItem('ai_quantum_purchase_orders') || '[]');
-          const filtered = stored.filter((item: any) => item.id !== data.order.id);
-          filtered.unshift(data.order);
-          localStorage.setItem('ai_quantum_purchase_orders', JSON.stringify(filtered));
-        } catch {
-          // ignore
-        }
-      }
-
-      setIsSuccess(true);
-    } catch (err: any) {
-      console.error('Error enviando orden:', err);
-      setErrorMessage(err.message || 'Error de conexión. Intentá nuevamente.');
-    } finally {
-      setIsSubmitting(false);
+      const order = {
+        id: `purchase_${Date.now()}`,
+        product: 'dividi-mesa',
+        product_name: 'Dividí Mesa',
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        payment_method: selectedMethod,
+        price_ars: 3300,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      };
+      const stored = JSON.parse(localStorage.getItem('ai_quantum_purchase_orders') || '[]');
+      stored.unshift(order);
+      localStorage.setItem('ai_quantum_purchase_orders', JSON.stringify(stored));
+    } catch {
+      // ignore
     }
+
+    // Abrir WhatsApp directamente compatible con escritorio y móvil
+    window.open(waLink, '_blank', 'noopener,noreferrer');
+
+    // Mostrar pantalla de confirmación visual
+    setIsSuccess(true);
   };
 
   const handleModalClose = () => {
@@ -117,7 +124,7 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
           <X className="w-5 h-5" />
         </button>
 
-        {/* PANTALLA 1: ÉXITO / SOLICITUD RECIBIDA */}
+        {/* PANTALLA 1: CONFIRMACIÓN VISUAL WHATSAPP */}
         {isSuccess ? (
           <div className="py-6 sm:py-8 text-center space-y-5 animate-in zoom-in-95 duration-200 relative z-10">
             <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
@@ -126,35 +133,41 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
 
             <div className="space-y-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider">
-                ✓ PENDIENTE DE VERIFICACIÓN
+                ✓ WhatsApp Preparado
               </span>
               <h2 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
-                ✅ SOLICITUD RECIBIDA
+                ✅ Solicitud preparada
               </h2>
             </div>
 
             <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 space-y-3 font-mono text-xs text-left max-w-sm mx-auto">
               <p className="text-slate-200">
-                Registramos tu solicitud de acceso a <strong className="text-cyan-400">Dividí Mesa</strong>.
-              </p>
-              <p className="text-slate-300">
-                Estamos verificando el pago ingresado por <strong>{selectedMethod}</strong>.
+                Se abrió WhatsApp con tus datos de compra. Solo tenés que presionar <strong>ENVIAR</strong> para completar la solicitud.
               </p>
               <p className="text-emerald-400 font-semibold">
-                Una vez confirmado, recibirás tu acceso directo.
+                Una vez que verifiquemos el pago, te vamos a enviar tu acceso a Dividí Mesa por WhatsApp.
               </p>
             </div>
 
-            <p className="text-xs text-slate-400 font-mono">
-              No necesitás realizar ningún otro paso.
-            </p>
+            <div className="space-y-3 pt-2">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-emerald-500/25 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>💬 ABRIR WHATSAPP</span>
+              </a>
 
-            <button
-              onClick={handleModalClose}
-              className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-cyan-400/20 cursor-pointer active:scale-98"
-            >
-              CERRAR
-            </button>
+              <button
+                type="button"
+                onClick={handleModalClose}
+                className="w-full py-3 bg-white/10 hover:bg-white/15 text-slate-300 hover:text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+              >
+                CERRAR
+              </button>
+            </div>
           </div>
         ) : (
           /* PANTALLA 2: FORMULARIO Y SELECCIÓN DE PAGO */
@@ -178,168 +191,162 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
               <div className="mt-3 p-3.5 rounded-2xl bg-white/[0.04] border border-cyan-500/20 flex flex-wrap items-baseline justify-between gap-2">
                 <div>
                   <span className="text-[11px] font-mono text-slate-400 block uppercase">
-                    Precio final:
+                    Precio Final Oficial
                   </span>
-                  <div className="flex items-baseline gap-2 mt-0.5">
-                    <span className="font-display text-2xl sm:text-3xl font-black text-cyan-400">
-                      USD 2
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-display text-2xl sm:text-3xl font-black text-white">
+                      $3.300 <span className="text-base text-cyan-400 font-mono">ARS</span>
                     </span>
-                    <span className="text-xs font-mono text-slate-400 font-medium">
-                      · Argentina: <strong className="text-white">$3.300 ARS</strong>
+                    <span className="text-xs font-mono text-slate-400">
+                      o <strong className="text-slate-200">USD 2</strong> cripto
                     </span>
                   </div>
                 </div>
-
-                <div className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                  Activación Manual 100%
+                <div className="text-right">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <Sparkles className="w-3 h-3" /> Pago único
+                  </span>
                 </div>
               </div>
-
-              <p className="mt-3 text-xs sm:text-sm text-slate-300 font-mono">
-                Elegí cómo querés realizar el pago.
-              </p>
             </div>
 
             {/* Selector de Método de Pago */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setSelectedMethod('Personal Pay')}
-                className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                  selectedMethod === 'Personal Pay'
-                    ? 'bg-cyan-500/15 border-cyan-400 shadow-md shadow-cyan-400/20'
-                    : 'bg-white/[0.02] border-white/10 hover:border-white/20'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                      <span>🇦🇷</span> PERSONAL PAY
-                    </span>
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-slate-400 uppercase tracking-wider block">
+                Seleccioná tu método de pago
+              </label>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedMethod('Personal Pay')}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
+                    selectedMethod === 'Personal Pay'
+                      ? 'bg-cyan-500/10 border-cyan-400 shadow-lg shadow-cyan-500/10'
+                      : 'bg-white/5 border-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl">🇦🇷</span>
                     {selectedMethod === 'Personal Pay' && (
-                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                     )}
                   </div>
-                  <div className="text-[11px] font-mono text-slate-400">
-                    Transferencia / QR
-                  </div>
-                </div>
-                <div className="mt-3 font-mono font-black text-sm text-cyan-300">
-                  $3.300 ARS
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSelectedMethod('Binance Pay')}
-                className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                  selectedMethod === 'Binance Pay'
-                    ? 'bg-amber-500/15 border-amber-400 shadow-md shadow-amber-400/20'
-                    : 'bg-white/[0.02] border-white/10 hover:border-white/20'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold font-mono text-white flex items-center gap-1.5">
-                      <span>₿</span> BINANCE PAY
-                    </span>
-                    {selectedMethod === 'Binance Pay' && (
-                      <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    )}
-                  </div>
-                  <div className="text-[11px] font-mono text-slate-400">
-                    Pagá con Binance Pay
-                  </div>
-                </div>
-                <div className="mt-3 font-mono font-black text-sm text-amber-300">
-                  USD 2
-                </div>
-              </button>
-            </div>
-
-            {/* Detalle Operativo del Método Seleccionado */}
-            {selectedMethod === 'Personal Pay' ? (
-              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3 font-mono text-xs">
-                <div className="text-slate-300">
-                  Pagá mediante transferencia o QR desde tu billetera compatible:
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase tracking-widest block">
-                      ALIAS:
-                    </span>
-                    <span className="font-mono text-base font-extrabold text-white tracking-wider">
-                      {DIVIDI_MESA_PRICE.personalPayAlias}
-                    </span>
+                    <div className="font-bold text-sm text-white">Personal Pay</div>
+                    <div className="text-[11px] font-mono text-cyan-400 font-semibold">$3.300 ARS</div>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyAlias}
-                    className="px-3 py-2 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-bold text-xs uppercase flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
-                  >
-                    {copiedAlias ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-black" />
-                        <span>¡COPIADO!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>COPIAR ALIAS</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setActiveQrViewer('personal')}
-                    className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-mono text-xs uppercase font-bold flex items-center justify-center gap-2 transition-all cursor-pointer border border-white/10"
-                  >
-                    <QrCode className="w-4 h-4 text-cyan-400" />
-                    <span>▣ MOSTRAR QR</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3 font-mono text-xs">
-                <div className="text-slate-300">
-                  Pagá con Binance Pay escaneando el código QR oficial de la cuenta:
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-slate-400 uppercase tracking-widest block">
-                      IMPORTE CRIPTO:
-                    </span>
-                    <span className="font-mono text-base font-extrabold text-amber-300">
-                      USD 2 (USDT / BUSD)
-                    </span>
-                  </div>
-                  <span className="px-2 py-1 rounded bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[10px] font-bold">
-                    BINANCE
-                  </span>
-                </div>
+                </button>
 
                 <button
                   type="button"
-                  onClick={() => setActiveQrViewer('binance')}
-                  className="w-full py-2.5 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 border border-amber-400/30 font-mono text-xs uppercase font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  onClick={() => setSelectedMethod('Binance Pay')}
+                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
+                    selectedMethod === 'Binance Pay'
+                      ? 'bg-amber-500/10 border-amber-400 shadow-lg shadow-amber-500/10'
+                      : 'bg-white/5 border-white/10 hover:border-white/20'
+                  }`}
                 >
-                  <QrCode className="w-4 h-4 text-amber-400" />
-                  <span>▣ MOSTRAR QR DE BINANCE PAY</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl">₿</span>
+                    {selectedMethod === 'Binance Pay' && (
+                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm text-white">Binance Pay</div>
+                    <div className="text-[11px] font-mono text-amber-400 font-semibold">USD 2 (USDT)</div>
+                  </div>
                 </button>
               </div>
-            )}
+            </div>
 
-            {/* Formulario de Datos del Cliente (SOLO Nombre y Email) */}
-            <form onSubmit={handleSubmitPayment} className="space-y-4 pt-2 border-t border-white/10">
+            {/* Detalles del Pago Seleccionado */}
+            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
+              {selectedMethod === 'Personal Pay' ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-slate-400">Total a transferir:</span>
+                    <span className="font-mono text-lg font-black text-cyan-400">$3.300 ARS</span>
+                  </div>
+
+                  {/* Alias Copiable */}
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-mono text-slate-400 block">
+                      Alias de Personal Pay:
+                    </span>
+                    <div className="flex items-center gap-2 bg-black/40 p-2.5 rounded-xl border border-white/10">
+                      <code className="text-cyan-300 font-mono font-bold text-sm flex-1 tracking-wider">
+                        {DIVIDI_MESA_PRICE.personalPayAlias}
+                      </code>
+                      <button
+                        type="button"
+                        onClick={handleCopyAlias}
+                        className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-mono font-bold transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95"
+                      >
+                        {copiedAlias ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-emerald-400">¡Copiado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copiar</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Botón para Abrir Visor de QR */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveQrViewer('personal')}
+                      className="w-full py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-cyan-400/40 text-xs font-mono text-slate-200 hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <QrCode className="w-4 h-4 text-cyan-400" />
+                      <span>Ver código QR de Personal Pay en pantalla completa</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-slate-400">Total a transferir:</span>
+                    <span className="font-mono text-lg font-black text-amber-400">USD 2 (USDT/BUSD)</span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-mono text-slate-400 block">
+                      Pago directo vía Binance:
+                    </span>
+                    <p className="text-xs font-mono text-slate-300 leading-relaxed">
+                      Escaneá el código QR oficial de Binance Pay desde tu app de Binance para transferir exactamente USD 2.
+                    </p>
+                  </div>
+
+                  {/* Botón para Abrir Visor de QR Binance */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveQrViewer('binance')}
+                      className="w-full py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-amber-400/40 text-xs font-mono text-slate-200 hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <QrCode className="w-4 h-4 text-amber-400" />
+                      <span>Ver código QR de Binance Pay en pantalla completa</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Formulario de Datos del Comprador */}
+            <form onSubmit={handleSubmitPayment} className="space-y-4">
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-1.5">
+                  <label className="text-xs font-mono text-slate-300 block mb-1.5 font-bold">
                     Nombre completo <span className="text-cyan-400">*</span>
                   </label>
                   <input
@@ -347,14 +354,14 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Ej. Juan Pérez"
+                    placeholder="Ej: Sofía Valenzuela"
                     className="w-full px-4 py-3 bg-white/5 border border-white/15 focus:border-cyan-400 rounded-xl text-white font-mono text-sm placeholder:text-slate-500 focus:outline-none transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-1.5">
-                    Email donde recibirás tu acceso <span className="text-cyan-400">*</span>
+                  <label className="text-xs font-mono text-slate-300 block mb-1.5 font-bold">
+                    Email de acceso <span className="text-cyan-400">*</span>
                   </label>
                   <input
                     type="email"
@@ -374,24 +381,18 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
                 </div>
               )}
 
-              {/* Botón Principal: YA REALICÉ EL PAGO */}
+              {/* Botón Principal: ENVIAR SOLICITUD DE ACCESO */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 disabled:bg-slate-800 disabled:text-slate-500 text-black font-mono font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-cyan-400/25 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-cyan-400/25 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
               >
-                {isSubmitting ? (
-                  <span>REGISTRANDO SOLICITUD...</span>
-                ) : (
-                  <>
-                    <span>✅ YA REALICÉ EL PAGO</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                <MessageCircle className="w-5 h-5 text-black" />
+                <span>ENVIAR SOLICITUD DE ACCESO</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
 
               <p className="text-[11px] font-mono text-slate-400 text-center">
-                Verificación manual por el equipo de AI Quantum Studio.
+                Atención directa por WhatsApp · Verificación manual por AI Quantum Studio
               </p>
             </form>
           </div>
@@ -435,7 +436,7 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
 
               <div className="space-y-3 pt-2 font-mono text-xs text-slate-300">
                 <p className="text-[11px] text-slate-400 leading-relaxed px-2">
-                  Una vez realizado el pago, completá tus datos en el formulario y pulsá <strong>"YA REALICÉ EL PAGO"</strong>.
+                  Una vez realizado el pago, completá tus datos en el formulario y pulsá <strong>"ENVIAR SOLICITUD DE ACCESO"</strong>.
                 </p>
 
                 <button
