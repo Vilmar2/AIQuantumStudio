@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Proxy all /api/* requests directly to Netlify Functions without changing URL in browser
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

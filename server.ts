@@ -46,7 +46,7 @@ const entitlements: Map<string, EntitlementRecord[]> = new Map(); // userId -> r
 const purchaseOrders: Map<string, PurchaseOrderRecord> = new Map();
 
 // Helper: Email dispatcher (logs clearly in console & supports RESEND_API_KEY if configured)
-async function sendNotificationEmail(to: string, subject: string, text: string) {
+async function sendNotificationEmail(to: string, subject: string, text: string, html?: string) {
   console.log(`\n================== [NOTIFICACIÓN POR EMAIL] ==================`);
   console.log(`DESTINATARIO: ${to}`);
   console.log(`ASUNTO: ${subject}`);
@@ -54,26 +54,49 @@ async function sendNotificationEmail(to: string, subject: string, text: string) 
   console.log(text);
   console.log(`==============================================================\n`);
 
-  if (process.env.RESEND_API_KEY) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.log('[RESEND] RESEND_API_KEY no detectada en process.env local. (El contenido fue emitido en el log superior).');
+    return { success: false, warning: 'NO_RESEND_API_KEY' };
+  }
+
+  const fromCandidates = [
+    process.env.RESEND_FROM_EMAIL,
+    'AI Quantum Studio <onboarding@resend.dev>',
+    'onboarding@resend.dev',
+    'AI Quantum Studio <ventas@aiquantum.studio>',
+  ].filter(Boolean) as string[];
+
+  for (const from of fromCandidates) {
     try {
       const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'AI Quantum Studio <ventas@aiquantum.studio>',
+          from,
           to: [to],
           subject,
           text,
+          html: html || `<div style="font-family:sans-serif;line-height:1.6;color:#111;padding:16px;">${text.replace(/\n/g, '<br/>')}</div>`,
         }),
       });
-      console.log(`[RESEND] Notificación enviada. Status: ${res.status}`);
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        console.log(`[RESEND ÉXITO] Notificación enviada a ${to} desde "${from}". ID: ${data.id}`);
+        return { success: true, id: data.id, from };
+      } else {
+        console.warn(`[RESEND AVISO DESDE "${from}"]:`, res.status, data);
+      }
     } catch (err) {
-      console.error('[RESEND] Error enviando correo:', err);
+      console.error(`[RESEND ERROR DESDE "${from}"]:`, err);
     }
   }
+
+  return { success: false };
 }
 
 // Helper: Hash password

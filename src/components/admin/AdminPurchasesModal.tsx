@@ -34,11 +34,37 @@ export const AdminPurchasesModal: React.FC<AdminPurchasesModalProps> = ({
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/admin/purchase-orders');
-      const data = await res.json();
-      if (data.success && Array.isArray(data.orders)) {
-        setOrders(data.orders);
+      let serverOrders: PurchaseOrderRecord[] = [];
+      try {
+        const res = await fetch('/api/admin/purchase-orders');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.orders)) {
+          serverOrders = data.orders;
+        }
+      } catch (err) {
+        console.warn('Could not reach /api/admin/purchase-orders:', err);
       }
+
+      // Sync with localStorage
+      let localOrders: PurchaseOrderRecord[] = [];
+      try {
+        localOrders = JSON.parse(localStorage.getItem('ai_quantum_purchase_orders') || '[]');
+      } catch {
+        // ignore
+      }
+
+      const map = new Map<string, PurchaseOrderRecord>();
+      serverOrders.forEach((o) => map.set(o.id, o));
+      localOrders.forEach((o) => {
+        if (!map.has(o.id)) {
+          map.set(o.id, o);
+        }
+      });
+
+      const merged = Array.from(map.values()).sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setOrders(merged);
     } catch (err) {
       console.error('Error fetching admin orders:', err);
     } finally {
@@ -68,6 +94,17 @@ export const AdminPurchasesModal: React.FC<AdminPurchasesModalProps> = ({
 
       if (!res.ok) {
         throw new Error(data.error || 'Error al activar la licencia.');
+      }
+
+      // Actualizar también en el backup local
+      try {
+        const local = JSON.parse(localStorage.getItem('ai_quantum_purchase_orders') || '[]');
+        const updated = local.map((item: any) =>
+          item.id === confirmingOrder.id ? { ...item, status: 'active', activated_at: new Date().toISOString() } : item
+        );
+        localStorage.setItem('ai_quantum_purchase_orders', JSON.stringify(updated));
+      } catch {
+        // ignore
       }
 
       setSuccessMessage(`¡Acceso activado con éxito para ${confirmingOrder.name}! Email de notificación enviado a ${confirmingOrder.email}.`);

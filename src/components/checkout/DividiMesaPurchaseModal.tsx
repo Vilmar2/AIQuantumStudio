@@ -73,6 +73,18 @@ export const DividiMesaPurchaseModal: React.FC<DividiMesaPurchaseModalProps> = (
         throw new Error(data.error || 'Error al procesar la solicitud.');
       }
 
+      // Backup local persistente para máxima sincronización en entornos serverless/Netlify
+      if (data.order) {
+        try {
+          const stored = JSON.parse(localStorage.getItem('ai_quantum_purchase_orders') || '[]');
+          const filtered = stored.filter((item: any) => item.id !== data.order.id);
+          filtered.unshift(data.order);
+          localStorage.setItem('ai_quantum_purchase_orders', JSON.stringify(filtered));
+        } catch {
+          // ignore
+        }
+      }
+
       setIsSuccess(true);
     } catch (err: any) {
       console.error('Error enviando orden:', err);
