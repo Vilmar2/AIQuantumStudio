@@ -31,20 +31,20 @@ export const DividiMesaVisualPreview: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[#070b12] border border-cyan-500/25 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[360px] sm:min-h-[400px]">
+    <div className="w-full bg-[#070b12] border border-cyan-500/25 rounded-2xl p-3.5 sm:p-5 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[350px] sm:min-h-[400px]">
       {/* Background ambient glow */}
       <div className="absolute -top-10 -right-10 w-44 h-44 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top micro-bar: Live status & Progress Pills */}
-      <div className="relative z-10 flex items-center justify-between pb-3 border-b border-white/10 text-[11px] font-mono">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="text-cyan-400 font-bold uppercase tracking-wider">MICRO-DEMO EN VIVO</span>
+      <div className="relative z-10 flex items-center justify-between pb-3 border-b border-white/10 text-[10px] sm:text-[11px] font-mono">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+          <span className="text-cyan-400 font-bold uppercase tracking-wider truncate">MICRO-DEMO EN VIVO</span>
         </div>
 
         {/* 6 Step indicators */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
           {steps.map((s, idx) => (
             <button
               key={idx}
@@ -54,10 +54,10 @@ export const DividiMesaVisualPreview: React.FC = () => {
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 scene === idx 
-                  ? 'w-6 bg-cyan-400' 
+                  ? 'w-5 sm:w-6 bg-cyan-400' 
                   : scene > idx 
-                  ? 'w-2 bg-cyan-400/40' 
-                  : 'w-2 bg-white/10'
+                  ? 'w-1.5 sm:w-2 bg-cyan-400/40' 
+                  : 'w-1.5 sm:w-2 bg-white/10'
               }`}
               title={s.label}
             />
@@ -113,29 +113,29 @@ export const DividiMesaVisualPreview: React.FC = () => {
               <span>3 personas</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
-              <div className="bg-cyan-500/10 border border-cyan-400/40 rounded-xl p-3 text-center">
-                <div className="w-8 h-8 mx-auto rounded-full bg-cyan-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1.5 shadow">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5">
+              <div className="bg-cyan-500/10 border border-cyan-400/40 rounded-xl p-2 sm:p-3 text-center min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full bg-cyan-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1 sm:mb-1.5 shadow">
                   L
                 </div>
-                <div className="text-sm font-bold text-white">Lucas</div>
-                <div className="text-[10px] text-cyan-400 font-mono">Burger + Bebida</div>
+                <div className="text-xs sm:text-sm font-bold text-white truncate">Lucas</div>
+                <div className="text-[9px] sm:text-[10px] text-cyan-400 font-mono truncate">Burger + Bebida</div>
               </div>
 
-              <div className="bg-emerald-500/10 border border-emerald-400/40 rounded-xl p-3 text-center">
-                <div className="w-8 h-8 mx-auto rounded-full bg-emerald-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1.5 shadow">
+              <div className="bg-emerald-500/10 border border-emerald-400/40 rounded-xl p-2 sm:p-3 text-center min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full bg-emerald-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1 sm:mb-1.5 shadow">
                   S
                 </div>
-                <div className="text-sm font-bold text-white">Sofía</div>
-                <div className="text-[10px] text-emerald-400 font-mono">Pizza + Bebida</div>
+                <div className="text-xs sm:text-sm font-bold text-white truncate">Sofía</div>
+                <div className="text-[9px] sm:text-[10px] text-emerald-400 font-mono truncate">Pizza + Bebida</div>
               </div>
 
-              <div className="bg-indigo-500/10 border border-indigo-400/40 rounded-xl p-3 text-center">
-                <div className="w-8 h-8 mx-auto rounded-full bg-indigo-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1.5 shadow">
+              <div className="bg-indigo-500/10 border border-indigo-400/40 rounded-xl p-2 sm:p-3 text-center min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full bg-indigo-400 text-black font-mono font-black flex items-center justify-center text-xs mb-1 sm:mb-1.5 shadow">
                   M
                 </div>
-                <div className="text-sm font-bold text-white">Martín</div>
-                <div className="text-[10px] text-indigo-400 font-mono">Burger + Bebida</div>
+                <div className="text-xs sm:text-sm font-bold text-white truncate">Martín</div>
+                <div className="text-[9px] sm:text-[10px] text-indigo-400 font-mono truncate">Burger + Bebida</div>
               </div>
             </div>
             <p className="text-[11px] font-mono text-slate-400 text-center">
@@ -148,36 +148,36 @@ export const DividiMesaVisualPreview: React.FC = () => {
         {scene === 2 && (
           <div className="animate-in fade-in duration-300 space-y-2.5">
             <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-              <span className="uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+              <span className="uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5 truncate">
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
                 Asignación plato por plato
               </span>
-              <span className="text-emerald-400 font-bold">100% Asignado</span>
+              <span className="text-emerald-400 font-bold shrink-0">100% Asignado</span>
             </div>
 
             <div className="space-y-2 text-xs font-mono">
-              <div className="bg-white/5 border border-white/10 rounded-xl p-2.5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="px-1.5 py-0.5 rounded bg-cyan-400 text-black font-bold text-[10px]">Lucas</span>
-                  <span className="text-slate-200">1x Hamburguesa + 1x Bebida</span>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-2 sm:p-2.5 flex items-center justify-between gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                  <span className="px-1.5 py-0.5 rounded bg-cyan-400 text-black font-bold text-[9px] sm:text-[10px] shrink-0">Lucas</span>
+                  <span className="text-slate-200 text-[11px] sm:text-xs truncate">1x Hamburguesa + 1x Bebida</span>
                 </div>
-                <span className="font-bold text-white text-sm">$16.000</span>
+                <span className="font-bold text-white text-xs sm:text-sm shrink-0">$16.000</span>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-xl p-2.5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="px-1.5 py-0.5 rounded bg-emerald-400 text-black font-bold text-[10px]">Sofía</span>
-                  <span className="text-slate-200">1x Pizza + 1x Bebida</span>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-2 sm:p-2.5 flex items-center justify-between gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                  <span className="px-1.5 py-0.5 rounded bg-emerald-400 text-black font-bold text-[9px] sm:text-[10px] shrink-0">Sofía</span>
+                  <span className="text-slate-200 text-[11px] sm:text-xs truncate">1x Pizza + 1x Bebida</span>
                 </div>
-                <span className="font-bold text-white text-sm">$13.000</span>
+                <span className="font-bold text-white text-xs sm:text-sm shrink-0">$13.000</span>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-xl p-2.5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="px-1.5 py-0.5 rounded bg-indigo-400 text-black font-bold text-[10px]">Martín</span>
-                  <span className="text-slate-200">Consumo compartido</span>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-2 sm:p-2.5 flex items-center justify-between gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                  <span className="px-1.5 py-0.5 rounded bg-indigo-400 text-black font-bold text-[9px] sm:text-[10px] shrink-0">Martín</span>
+                  <span className="text-slate-200 text-[11px] sm:text-xs truncate">Consumo compartido</span>
                 </div>
-                <span className="font-bold text-white text-sm">$9.200</span>
+                <span className="font-bold text-white text-xs sm:text-sm shrink-0">$9.200</span>
               </div>
             </div>
             <p className="text-[11px] font-mono text-slate-400 text-center">

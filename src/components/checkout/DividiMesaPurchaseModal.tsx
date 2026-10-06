@@ -109,8 +109,8 @@ Solicito la activación de mi acceso a Dividí Mesa.`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-[#070b12] border border-cyan-500/30 rounded-3xl p-5 sm:p-8 shadow-2xl shadow-cyan-950/60 my-auto text-white overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg bg-[#070b12] border border-cyan-500/30 rounded-3xl p-4 sm:p-8 shadow-2xl shadow-cyan-950/60 my-auto text-white overflow-hidden max-h-[94vh] overflow-y-auto">
         {/* Glow Effects */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -384,11 +384,11 @@ Solicito la activación de mi acceso a Dividí Mesa.`;
               {/* Botón Principal: ENVIAR SOLICITUD DE ACCESO */}
               <button
                 type="submit"
-                className="w-full py-4 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-cyan-400/25 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3.5 sm:py-4 px-2 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-black text-xs min-[380px]:text-sm uppercase tracking-wider sm:tracking-widest rounded-xl transition-all shadow-xl shadow-cyan-400/25 active:scale-98 cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2"
               >
-                <MessageCircle className="w-5 h-5 text-black" />
-                <span>ENVIAR SOLICITUD DE ACCESO</span>
-                <ArrowRight className="w-4 h-4" />
+                <MessageCircle className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-black shrink-0" />
+                <span className="truncate">ENVIAR SOLICITUD DE ACCESO</span>
+                <ArrowRight className="w-4 h-4 shrink-0" />
               </button>
 
               <p className="text-[11px] font-mono text-slate-400 text-center">
@@ -400,8 +400,8 @@ Solicito la activación de mi acceso a Dividí Mesa.`;
 
         {/* SUB-MODAL VISOR DE QR (Centrado, Grande, Alto Contraste, Mobile First) */}
         {activeQrViewer && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-3 sm:p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-150 overflow-y-auto">
-            <div className="relative w-full max-w-md bg-[#090e17] border border-cyan-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl text-center space-y-4 my-auto">
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-2 sm:p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-150 overflow-y-auto">
+            <div className="relative w-full max-w-md bg-[#090e17] border border-cyan-500/30 rounded-3xl p-4 sm:p-7 shadow-2xl text-center space-y-4 my-auto max-h-[94vh] overflow-y-auto">
               <button
                 onClick={() => setActiveQrViewer(null)}
                 className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors cursor-pointer z-10"
@@ -414,7 +414,7 @@ Solicito la activación de mi acceso a Dividí Mesa.`;
                 <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold block">
                   {activeQrViewer === 'personal' ? '🇦🇷 PERSONAL PAY' : '₿ BINANCE PAY'}
                 </span>
-                <h3 className="font-display text-xl sm:text-2xl font-black text-white tracking-tight">
+                <h3 className="font-display text-lg sm:text-2xl font-black text-white tracking-tight">
                   Escaneá el QR desde tu billetera
                 </h3>
                 <p className="text-xs font-mono text-slate-400">
@@ -425,7 +425,7 @@ Solicito la activación de mi acceso a Dividí Mesa.`;
               </div>
 
               {/* Contenedor del QR en Alto Contraste, Sin Recortes y con Amplio Margen */}
-              <div className="p-4 sm:p-6 bg-white rounded-3xl mx-auto w-full max-w-[300px] sm:max-w-[340px] shadow-2xl flex items-center justify-center">
+              <div className="p-3 sm:p-6 bg-white rounded-3xl mx-auto w-full max-w-[260px] min-[380px]:max-w-[300px] sm:max-w-[340px] shadow-2xl flex items-center justify-center">
                 <img
                   src={activeQrViewer === 'personal' ? qrPersonalPay : qrBinancePay}
                   alt={activeQrViewer === 'personal' ? 'QR Oficial Personal Pay' : 'QR Oficial Binance Pay'}

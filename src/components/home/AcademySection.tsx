@@ -9,47 +9,47 @@ interface AcademySectionProps {
 
 export const AcademySection: React.FC<AcademySectionProps> = ({ onLearnMoreClick }) => {
   return (
-    <section id="academy" className="relative py-28 bg-[#05070b] overflow-hidden border-t border-white/5">
-      <div className="max-w-5xl mx-auto px-6 md:px-10">
-        <div className="rounded-2xl glass-panel border border-cyan-500/20 p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-10">
+    <section id="academy" className="relative py-20 sm:py-28 bg-[#05070b] overflow-hidden border-t border-white/5">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-10">
+        <div className="rounded-2xl glass-panel border border-cyan-500/20 p-5 sm:p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8 sm:gap-10">
           {/* Subtle inside glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Left Content */}
           <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold mb-2">
+            <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold mb-2">
               <GraduationCap className="w-4 h-4" />
               <span>Campus Digital</span>
             </div>
 
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
+            <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
               AI QUANTUM ACADEMY
             </h2>
 
-            <div className="mt-2 text-lg sm:text-xl font-light text-slate-300">
+            <div className="mt-2 text-base sm:text-xl font-light text-slate-300">
               Formación práctica en Inteligencia Artificial.
             </div>
 
-            <p className="mt-3 text-sm text-slate-400 leading-relaxed font-light">
+            <p className="mt-3 text-xs sm:text-sm text-slate-400 leading-relaxed font-light">
               Cursos y programas orientados a la aplicación práctica de herramientas de Inteligencia Artificial para resolver problemas y crear productos reales.
             </p>
 
             {/* 21. Visual Learning Axes (Automations included here, not as a standalone home service) */}
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-5 sm:mt-6 flex flex-wrap gap-2">
               {ACADEMY_LEARNING_AXES.map((axis) => (
                 <span
                   key={axis.title}
-                  className="px-3 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-mono tracking-wider text-slate-300"
+                  className="px-2.5 sm:px-3 py-1 rounded bg-white/5 border border-white/10 text-[10px] sm:text-[11px] font-mono tracking-wider text-slate-300"
                 >
                   {axis.title}
                 </span>
               ))}
             </div>
 
-            <div className="mt-8">
+            <div className="mt-6 sm:mt-8">
               <button
                 onClick={onLearnMoreClick}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-bold text-xs uppercase tracking-widest rounded transition-all cursor-pointer shadow-lg shadow-cyan-400/20 active:scale-[0.98]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-bold text-xs uppercase tracking-widest rounded transition-all cursor-pointer shadow-lg shadow-cyan-400/20 active:scale-[0.98]"
               >
                 <span>CONOCER ACADEMY</span>
                 <ArrowRight className="w-4 h-4" />
@@ -59,7 +59,7 @@ export const AcademySection: React.FC<AcademySectionProps> = ({ onLearnMoreClick
 
           {/* Right: Founder presence */}
           <div className="shrink-0 flex flex-col items-center md:items-end">
-            <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border border-white/15 bg-slate-900 shadow-xl group">
+            <div className="relative w-32 h-32 min-[420px]:w-36 min-[420px]:h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border border-white/15 bg-slate-900 shadow-xl group">
               <img
                 src={founderPhoto}
                 alt="Vilmar Olivera — AI Quantum Academy"

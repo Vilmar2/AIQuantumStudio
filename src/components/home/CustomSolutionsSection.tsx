@@ -34,44 +34,44 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
   };
 
   return (
-    <section id="soluciones" className="relative py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
-      <div className="max-w-5xl mx-auto px-6 md:px-10 relative z-10">
+    <section id="soluciones" className="relative py-20 sm:py-28 md:py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
             03. Soluciones Digitales
           </span>
-          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
+          <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
             TU PROBLEMA.
-            <span className="block text-slate-400 font-extrabold text-3xl sm:text-5xl md:text-6xl mt-1">
+            <span className="block text-slate-400 font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl mt-1">
               UNA EXPERIENCIA DISEÑADA A MEDIDA.
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300 font-light leading-relaxed max-w-xl mx-auto">
+          <p className="mt-4 text-sm sm:text-lg text-slate-300 font-light leading-relaxed max-w-xl mx-auto px-2">
             Si tenés una necesidad específica o una lógica de negocio propia, diseñamos una herramienta digital alrededor de tu problema.
           </p>
         </div>
 
         {/* 19. IDEA → PRODUCTO: "UNA IDEA PUEDE CONVERTIRSE EN UNA HERRAMIENTA" */}
-        <div className="mb-20">
-          <div className="text-center mb-8">
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-slate-400 block mb-2">
+        <div className="mb-14 sm:mb-20">
+          <div className="text-center mb-6 sm:mb-8">
+            <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-slate-400 block mb-2">
               Transformación
             </span>
-            <h3 className="font-display text-2xl sm:text-3xl font-black text-white uppercase">
+            <h3 className="font-display text-xl sm:text-3xl font-black text-white uppercase">
               UNA IDEA PUEDE CONVERTIRSE EN UNA HERRAMIENTA.
             </h3>
           </div>
 
           {/* 4-Phase Progression */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {steps.map((st, i) => {
               const Icon = st.icon;
               return (
                 <div
                   key={st.title}
                   onClick={() => setActiveStep(i)}
-                  className={`p-6 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between min-h-[190px] ${
+                  className={`p-4 sm:p-6 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between min-h-[170px] sm:min-h-[190px] ${
                     activeStep === i
                       ? 'bg-slate-900 border-cyan-400 shadow-xl shadow-cyan-950/40 -translate-y-1'
                       : 'bg-slate-950/60 border-white/5 hover:border-white/20'
@@ -79,16 +79,16 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
                 >
                   <div className="flex items-center justify-between">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center"
                       style={{ backgroundColor: `${st.color}15`, color: st.color }}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <span className="font-mono text-xs text-slate-400">0{i + 1}</span>
                   </div>
 
                   <div>
-                    <h4 className="font-display text-base font-bold text-white tracking-wider">{st.title}</h4>
+                    <h4 className="font-display text-sm sm:text-base font-bold text-white tracking-wider">{st.title}</h4>
                     <p className="mt-1 text-xs text-slate-400 font-mono leading-relaxed">{st.desc}</p>
                   </div>
                 </div>
@@ -98,14 +98,14 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
         </div>
 
         {/* 11. FORMULARIO COMO EXPERIENCIA: ¿QUÉ NECESITÁS RESOLVER? */}
-        <div className="rounded-2xl glass-panel border border-white/15 p-8 sm:p-12 shadow-2xl shadow-cyan-950/40">
+        <div className="rounded-2xl glass-panel border border-white/15 p-5 sm:p-8 md:p-12 shadow-2xl shadow-cyan-950/40">
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               <div>
-                <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold block mb-1">
+                <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold block mb-1">
                   Inicio del Proyecto
                 </span>
-                <h3 className="font-display text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+                <h3 className="font-display text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
                   ¿QUÉ NECESITÁS RESOLVER?
                 </h3>
               </div>
@@ -118,7 +118,7 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
                   value={ideaText}
                   onChange={(e) => setIdeaText(e.target.value)}
                   placeholder="Contame tu idea o qué proceso te gustaría digitalizar..."
-                  className="w-full bg-slate-950/90 border border-white/15 rounded-xl p-5 text-base sm:text-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full bg-slate-950/90 border border-white/15 rounded-xl p-4 sm:p-5 text-sm sm:text-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -127,13 +127,13 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
                 <label className="text-xs font-mono uppercase tracking-widest text-slate-400 block mb-3">
                   ¿Qué tipo de solución imaginás?
                 </label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   {(['MINI APP', 'DASHBOARD', 'OTRA'] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setSelectedType(t)}
-                      className={`py-3 px-4 rounded text-xs font-mono tracking-widest uppercase transition-all cursor-pointer border ${
+                      className={`py-2.5 sm:py-3 px-1.5 sm:px-4 rounded text-[10px] min-[380px]:text-xs font-mono tracking-wider sm:tracking-widest uppercase transition-all cursor-pointer border truncate ${
                         selectedType === t
                           ? 'bg-cyan-400 text-black font-bold border-cyan-400 shadow-lg shadow-cyan-400/20'
                           : 'bg-white/5 text-slate-300 border-white/10 hover:border-white/20'

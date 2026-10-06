@@ -10,32 +10,32 @@ export const TheSystemSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative py-28 bg-[#05070b] overflow-hidden border-t border-white/5">
+    <section className="relative py-20 sm:py-28 bg-[#05070b] overflow-hidden border-t border-white/5">
       {/* Background ambient subtle grid */}
       <div className="absolute inset-0 pointer-events-none opacity-20 quantum-bg-grid" />
 
-      <div className="max-w-6xl mx-auto px-6 md:px-10 relative z-10 text-center">
-        <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-10 relative z-10 text-center">
+        <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
           The System · Conexión Integral
         </span>
 
         {/* Big Editorial Headline */}
-        <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight">
+        <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight">
           TODO PUEDE CONECTARSE.
         </h2>
 
-        <p className="mt-4 text-slate-400 text-sm sm:text-base max-w-xl mx-auto font-mono leading-relaxed">
+        <p className="mt-4 text-slate-400 text-xs sm:text-base max-w-xl mx-auto font-mono leading-relaxed px-2">
           La red transforma datos dispersos en herramientas y las herramientas en experiencias tangibles.
         </p>
 
         {/* Visual Flow: IDEA → INFORMACIÓN → HERRAMIENTA → EXPERIENCIA */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {systemFlow.map((step, idx) => {
             const Icon = step.icon;
             return (
               <div
                 key={step.label}
-                className="group relative p-6 sm:p-8 rounded-2xl glass-panel border border-white/10 hover:border-cyan-400/50 transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1"
+                className="group relative p-5 sm:p-6 lg:p-8 rounded-2xl glass-panel border border-white/10 hover:border-cyan-400/50 transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1"
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"

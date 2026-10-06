@@ -13,7 +13,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
   onOpenModal,
 }) => {
   return (
-    <section className="relative py-36 bg-[#05070b] overflow-hidden border-t border-white/5 text-center">
+    <section className="relative py-20 sm:py-28 md:py-36 bg-[#05070b] overflow-hidden border-t border-white/5 text-center">
       {/* 3D Quantum Core Re-converged */}
       <div className="absolute inset-0 z-0 opacity-40 pointer-events-none flex items-center justify-center">
         <QuantumCoreCanvas scrollProgress={0.05} />
@@ -24,21 +24,21 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
         aria-hidden="true" 
       />
 
-      <div className="max-w-4xl mx-auto px-6 md:px-10 relative z-10">
-        <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold block mb-4">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
+        <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold block mb-3 sm:mb-4">
           The Quantum Core · Decisión
         </span>
 
         {/* 25. Headline */}
-        <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.05]">
+        <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.05]">
           ¿QUÉ QUERÉS CREAR?
         </h2>
 
         {/* 3 Clear Options */}
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
           <button
             onClick={() => onSelectOption('mini-apps')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
           >
             <span>UNA MINI APP</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -46,7 +46,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
 
           <button
             onClick={() => onSelectOption('dashboards')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-lg active:scale-[0.98]"
           >
             <span>UN DASHBOARD</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -54,7 +54,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
 
           <button
             onClick={() => onSelectOption('soluciones')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-extrabold text-xs uppercase tracking-widest rounded transition-all duration-300 cursor-pointer shadow-xl shadow-cyan-400/20 active:scale-[0.98]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-cyan-400 hover:bg-cyan-300 text-black font-mono font-extrabold text-xs uppercase tracking-widest rounded transition-all duration-300 cursor-pointer shadow-xl shadow-cyan-400/20 active:scale-[0.98]"
           >
             <span>UNA SOLUCIÓN DIGITAL</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -62,7 +62,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
         </div>
 
         {/* Academy Link Below (Small, quiet) */}
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-slate-400 font-mono">
+        <div className="mt-12 sm:mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-xs text-slate-400 font-mono">
           <span>¿Querés aprender Inteligencia Artificial?</span>
           <button
             onClick={() => onSelectOption('academy')}
@@ -74,7 +74,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
         </div>
 
         {/* Discrete Contact Mention */}
-        <div className="mt-10 text-[11px] font-mono text-slate-500 tracking-wider">
+        <div className="mt-8 sm:mt-10 text-[10px] sm:text-[11px] font-mono text-slate-500 tracking-wider px-2">
           WhatsApp: +54 9 341 285-2228 · Instagram: @vilmar.ai · AI Quantum Studio
         </div>
       </div>

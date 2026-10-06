@@ -50,33 +50,33 @@ export const MiniAppsShowroom: React.FC<MiniAppsShowroomProps> = ({
   }
 
   return (
-    <section id="mini-apps" className="relative py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
-      <div className="max-w-6xl mx-auto px-6 md:px-10">
+    <section id="mini-apps" className="relative py-20 sm:py-28 md:py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-10">
         {/* Section Header */}
-        <div className="max-w-3xl mb-16">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold mb-3">
+        <div className="max-w-3xl mb-12 sm:mb-16">
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             <span>01. LIVE MINI APP SHOWROOM</span>
           </div>
-          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
+          <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
             PEQUEÑAS HERRAMIENTAS.
-            <span className="block text-slate-400 font-extrabold text-3xl sm:text-5xl md:text-6xl mt-1">
+            <span className="block text-slate-400 font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl mt-1">
               GRANDES POSIBILIDADES.
             </span>
           </h2>
-          <p className="mt-4 text-lg sm:text-xl text-slate-300 font-light leading-relaxed">
+          <p className="mt-4 text-base sm:text-xl text-slate-300 font-light leading-relaxed">
             Mini aplicaciones interactivas creadas para resolver necesidades concretas. Probá la herramienta directamente dentro de AI Quantum Studio.
           </p>
         </div>
 
         {/* 3 Floating Digital Product Interfaces */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
           {marqueeApps.map((app, idx) => {
             if (app.id === 'dividi-mesa') {
               return (
                 <div
                   key={app.id}
-                  className="group relative rounded-3xl p-6 sm:p-7 glass-panel border border-cyan-500/40 bg-gradient-to-b from-cyan-950/20 via-[#070b12] to-[#05070b] shadow-2xl shadow-cyan-950/50 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/70 cursor-pointer"
+                  className="group relative rounded-3xl p-4 sm:p-6 lg:p-7 glass-panel border border-cyan-500/40 bg-gradient-to-b from-cyan-950/20 via-[#070b12] to-[#05070b] shadow-2xl shadow-cyan-950/50 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/70 cursor-pointer"
                   onClick={() => handleOpenApp(app)}
                 >
                   {/* Top: Strictly Minimal Text */}
@@ -144,7 +144,7 @@ export const MiniAppsShowroom: React.FC<MiniAppsShowroomProps> = ({
             return (
               <div
                 key={app.id}
-                className="group relative rounded-2xl p-8 glass-panel border border-white/10 hover:border-cyan-400/50 transition-all duration-500 flex flex-col justify-between min-h-[480px] cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-950/40"
+                className="group relative rounded-2xl p-5 sm:p-8 glass-panel border border-white/10 hover:border-cyan-400/50 transition-all duration-500 flex flex-col justify-between min-h-[440px] sm:min-h-[480px] cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-950/40"
                 onClick={() => handleOpenApp(app)}
               >
                 <div>
@@ -209,10 +209,10 @@ export const MiniAppsShowroom: React.FC<MiniAppsShowroomProps> = ({
         </div>
 
         {/* Section bottom CTA */}
-        <div className="mt-14 flex justify-center">
+        <div className="mt-12 sm:mt-14 flex justify-center">
           <button
             onClick={onViewAllClick}
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer"
           >
             <span>EXPLORAR TODAS LAS MINI APPS</span>
             <ArrowRight className="w-4 h-4" />

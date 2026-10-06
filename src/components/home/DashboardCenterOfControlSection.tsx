@@ -31,44 +31,44 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
   };
 
   return (
-    <section id="dashboards" className="relative py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
+    <section id="dashboards" className="relative py-20 sm:py-28 md:py-32 bg-[#05070b] overflow-hidden border-t border-white/5">
       {/* Background radial glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-950/20 rounded-full blur-[170px] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-6 md:px-10 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
         {/* 12. TRANSICIÓN: TODO ESTÁ DISPERSO */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
             02. Dashboards & Centralización
           </span>
-          <div className="font-mono text-sm uppercase tracking-widest text-red-400 mb-2">
+          <div className="font-mono text-xs sm:text-sm uppercase tracking-widest text-red-400 mb-2">
             TODO ESTÁ DISPERSO.
           </div>
-          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tight leading-[1.05]">
+          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tight leading-[1.05]">
             ¿Y SI TODO ESTUVIERA EN UN SOLO LUGAR?
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300 font-light max-w-xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-lg text-slate-300 font-light max-w-xl mx-auto leading-relaxed px-2">
             Tomamos información que hoy tenés fragmentada entre planillas, PDFs, mensajes y comprobantes, y la convertimos en una experiencia visual centralizada.
           </p>
         </div>
 
         {/* 16 & 17. EL CONCEPTO: ¿SEGUÍS HACIENDO ESTO MANUALMENTE? */}
-        <div className="p-8 sm:p-10 rounded-2xl glass-panel border border-white/10 mb-16">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/5">
+        <div className="p-5 sm:p-8 md:p-10 rounded-2xl glass-panel border border-white/10 mb-12 sm:mb-16">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 pb-6 border-b border-white/5">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider text-slate-400">
                 El dolor invisible
               </span>
-              <h3 className="font-display text-xl sm:text-2xl font-bold text-white mt-1">
+              <h3 className="font-display text-lg sm:text-2xl font-bold text-white mt-1">
                 ¿SEGUÍS HACIENDO ESTO MANUALMENTE?
               </h3>
             </div>
-            <div className="text-xs font-mono text-cyan-400">
+            <div className="text-[10px] sm:text-xs font-mono text-cyan-400">
               AUTOMATIZAR LO REPETITIVO → CENTRALIZARLO EN UN DASHBOARD
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {repetitiveTasks.map((task, i) => (
               <div key={i} className="p-4 rounded-xl bg-slate-900/60 border border-white/5">
                 <span className="text-xs font-mono font-bold text-white block mb-1">
@@ -83,15 +83,15 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
         </div>
 
         {/* 13 & 14 & 15. EL CENTRO DE CONTROL + SISTEMA DE CARGA PREPARADO */}
-        <div className="rounded-2xl glass-panel border border-cyan-500/30 p-6 sm:p-10 shadow-2xl shadow-cyan-950/40">
+        <div className="rounded-2xl glass-panel border border-cyan-500/30 p-4 sm:p-7 md:p-10 shadow-2xl shadow-cyan-950/40">
           {/* Header Bar */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-6 border-b border-white/10 gap-4">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
+              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-cyan-400">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>UN SOLO LUGAR · UNA SOLA EXPERIENCIA · MÁS CONTROL</span>
               </div>
-              <h3 className="font-display text-2xl sm:text-3xl font-black text-white mt-1">
+              <h3 className="font-display text-xl sm:text-3xl font-black text-white mt-1">
                 TODO LO QUE NECESITÁS. EN UN SOLO LUGAR.
               </h3>
             </div>
@@ -116,13 +116,13 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
 
           {/* Active Control Center View */}
           <div className="mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-mono text-slate-400 uppercase">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4">
+              <span className="text-xs font-mono text-slate-400 uppercase truncate">
                 Panel Activo: <strong className="text-white">{activeDashboard.name}</strong> ({activeDashboard.category})
               </span>
               <button
                 onClick={() => handleOpenDemo(activeDashboard)}
-                className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-white uppercase font-bold cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-white uppercase font-bold cursor-pointer shrink-0"
               >
                 <Play className="w-3 h-3 fill-current" />
                 <span>PROBAR DEMO INTERACTIVA</span>
@@ -130,31 +130,31 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
             </div>
 
             {/* Main KPI Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-5 rounded-xl bg-slate-900/80 border border-white/5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="p-4 sm:p-5 rounded-xl bg-slate-900/80 border border-white/5">
                 <span className="text-xs font-mono text-slate-400 block">{activeDashboard.kpiLabel}</span>
-                <div className="font-mono text-3xl font-black text-white mt-1 tabular-nums">
+                <div className="font-mono text-2xl sm:text-3xl font-black text-white mt-1 tabular-nums">
                   {activeTimeRange === 'Hoy' ? '$1.840.000' : activeTimeRange === '7D' ? '$14.200.000' : activeDashboard.highlightKpi}
                 </div>
                 <span className="text-xs font-mono text-emerald-400 mt-2 block">{activeDashboard.kpiDelta}</span>
               </div>
 
               {activeDashboard.metrics.slice(0, 3).map((m, i) => (
-                <div key={i} className="p-5 rounded-xl bg-slate-900/80 border border-white/5">
+                <div key={i} className="p-4 sm:p-5 rounded-xl bg-slate-900/80 border border-white/5">
                   <span className="text-xs font-mono text-slate-400 block">{m.label}</span>
-                  <div className="font-mono text-3xl font-black text-white mt-1 tabular-nums">{m.value}</div>
+                  <div className="font-mono text-2xl sm:text-3xl font-black text-white mt-1 tabular-nums">{m.value}</div>
                   <span className="text-xs font-mono text-cyan-400 mt-2 block">{m.trend}</span>
                 </div>
               ))}
             </div>
 
             {/* Live Chart Stream */}
-            <div className="mt-6 p-6 rounded-xl bg-slate-950/80 border border-white/5">
+            <div className="mt-6 p-4 sm:p-6 rounded-xl bg-slate-950/80 border border-white/5">
               <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-4">
                 <span>Flujo de Datos Centralizados en Tiempo Real</span>
                 <span className="text-cyan-400 font-bold">● Live Sync</span>
               </div>
-              <div className="h-28 w-full flex items-end gap-2 sm:gap-3 pt-2">
+              <div className="h-24 sm:h-28 w-full flex items-end gap-1 sm:gap-2 md:gap-3 pt-2 overflow-hidden">
                 {[38, 48, 44, 62, 74, 68, 85, 96, 90, 108, 115, 122, 130, 142].map((v, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center">
                     <div
@@ -215,10 +215,10 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-14 flex justify-center">
+        <div className="mt-12 sm:mt-14 flex justify-center">
           <button
             onClick={onViewAllClick}
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 bg-white/5 hover:bg-cyan-400 text-white hover:text-black font-mono font-bold text-xs uppercase tracking-widest rounded border border-white/15 hover:border-cyan-400 transition-all duration-300 cursor-pointer"
           >
             <span>VER DASHBOARDS</span>
             <ArrowRight className="w-4 h-4" />

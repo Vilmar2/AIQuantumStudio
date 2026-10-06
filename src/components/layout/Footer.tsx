@@ -17,8 +17,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <>
       <footer className="relative bg-[#05070b] border-t border-white/5 pt-16 pb-12 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 md:px-10">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-10 pb-12 border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-10">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 sm:gap-10 pb-12 border-b border-white/5">
             {/* Brand */}
             <div className="max-w-xs">
               <span className="font-display font-extrabold text-xl tracking-wider text-white block">
@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
 
             {/* Core Links */}
-            <div className="flex flex-wrap gap-8 text-xs font-mono tracking-widest uppercase">
+            <div className="flex flex-wrap gap-6 sm:gap-8 text-xs font-mono tracking-widest uppercase">
               <div className="flex flex-col gap-2.5">
                 <span className="text-slate-300 font-semibold mb-1">Ecosistema</span>
                 <button
@@ -114,13 +114,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Bottom bar */}
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400 font-mono">
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-[11px] text-slate-400 font-mono text-center sm:text-left">
             <div>
               © 2026 AI Quantum Studio
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-4 text-center sm:text-right">
               <span>Vilmar Olivera · AI Quantum Studio · Fundadora</span>
-              <span>·</span>
+              <span className="hidden sm:inline">·</span>
               <button
                 onClick={() => setIsAdminOpen(true)}
                 className="text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer flex items-center gap-1"

@@ -59,27 +59,27 @@ export const EmbedViewer: React.FC<EmbedViewerProps> = ({
   const getContainerWidth = () => {
     switch (viewportMode) {
       case 'mobile':
-        return 'max-w-[400px] shadow-2xl shadow-cyan-950/40 border border-white/20 rounded-3xl overflow-hidden my-4 ring-8 ring-slate-900/80';
+        return 'w-full max-w-[400px] shadow-2xl shadow-cyan-950/40 border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden my-2 sm:my-4 ring-0 min-[440px]:ring-8 ring-slate-900/80';
       case 'tablet':
-        return 'max-w-[768px] shadow-2xl shadow-cyan-950/30 border border-white/15 rounded-2xl overflow-hidden my-2';
+        return 'w-full max-w-[768px] shadow-2xl shadow-cyan-950/30 border border-white/15 rounded-xl sm:rounded-2xl overflow-hidden my-2';
       default:
         return 'w-full rounded-xl overflow-hidden';
     }
   };
 
   return (
-    <div className={`relative w-full flex flex-col items-center justify-center bg-[#06080d] min-h-[580px] sm:min-h-[640px] ${className}`}>
+    <div className={`relative w-full flex flex-col items-center justify-center bg-[#06080d] min-h-[500px] sm:min-h-[640px] ${className}`}>
       {/* Top micro-bar for reload inside viewer */}
-      <div className="w-full flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#070b12] text-xs font-mono text-slate-400">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[11px] text-slate-300 font-semibold uppercase tracking-wider">
+      <div className="w-full flex items-center justify-between px-3 sm:px-4 py-2 border-b border-white/10 bg-[#070b12] text-xs font-mono text-slate-400">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="text-[10px] sm:text-[11px] text-slate-300 font-semibold uppercase tracking-wider truncate">
             {title} · Entorno Embebido Seguro
           </span>
         </div>
         <button
           onClick={handleReload}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer shrink-0 ml-2"
           title="Recargar Mini App"
         >
           <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin text-cyan-400' : ''}`} />
@@ -88,10 +88,10 @@ export const EmbedViewer: React.FC<EmbedViewerProps> = ({
       </div>
 
       {/* Main Content Area */}
-      <div className={`relative w-full flex-1 flex items-center justify-center p-2 sm:p-4 transition-all duration-300`}>
+      <div className={`relative w-full flex-1 flex items-center justify-center p-1 sm:p-4 transition-all duration-300`}>
         {hasError ? (
           /* Exact Fallback UI as specified in Section 17 */
-          <div className="w-full max-w-lg p-8 sm:p-12 text-center rounded-2xl glass-panel border border-white/10 my-10 shadow-2xl">
+          <div className="w-full max-w-lg p-6 sm:p-12 text-center rounded-2xl glass-panel border border-white/10 my-6 sm:my-10 shadow-2xl">
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-6 h-6" />
             </div>
@@ -112,7 +112,7 @@ export const EmbedViewer: React.FC<EmbedViewerProps> = ({
           </div>
         ) : (
           <div className={`w-full transition-all duration-300 flex justify-center items-center h-full ${getContainerWidth()}`}>
-            <div className="relative w-full h-[620px] sm:h-[700px] bg-slate-950 flex flex-col">
+            <div className="relative w-full h-[520px] sm:h-[640px] md:h-[700px] bg-slate-950 flex flex-col">
               {/* Loading State Overlay */}
               {isLoading && (
                 <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#070b12] text-center p-6">

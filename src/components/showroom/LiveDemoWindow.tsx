@@ -110,10 +110,10 @@ export const LiveDemoWindow: React.FC<LiveDemoWindowProps> = ({
           </div>
 
           {/* Sub Navigation Tabs */}
-          <div className="flex items-center gap-6 mt-6 pt-4 border-t border-white/10 text-xs font-mono">
+          <div className="flex items-center gap-3 sm:gap-6 mt-6 pt-4 border-t border-white/10 text-[11px] sm:text-xs font-mono overflow-x-auto no-scrollbar whitespace-nowrap">
             <button
               onClick={() => setActiveTab('demo')}
-              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold ${
+              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold shrink-0 ${
                 activeTab === 'demo'
                   ? 'border-cyan-400 text-cyan-400'
                   : 'border-transparent text-slate-400 hover:text-white'
@@ -123,7 +123,7 @@ export const LiveDemoWindow: React.FC<LiveDemoWindowProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('features')}
-              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold ${
+              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold shrink-0 ${
                 activeTab === 'features'
                   ? 'border-cyan-400 text-cyan-400'
                   : 'border-transparent text-slate-400 hover:text-white'
@@ -133,7 +133,7 @@ export const LiveDemoWindow: React.FC<LiveDemoWindowProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('modules')}
-              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold flex items-center gap-1.5 ${
+              className={`pb-2 transition-all cursor-pointer border-b-2 font-bold flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'modules'
                   ? 'border-cyan-400 text-cyan-400'
                   : 'border-transparent text-slate-400 hover:text-white'

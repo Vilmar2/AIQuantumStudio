@@ -79,7 +79,7 @@ function MainAppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#05070b] text-slate-100 flex flex-col selection:bg-cyan-400 selection:text-black relative">
+    <div className="min-h-screen bg-[#05070b] text-slate-100 flex flex-col selection:bg-cyan-400 selection:text-black relative w-full max-w-full overflow-x-hidden">
       {/* Layer 04: Custom Quantum Cursor */}
       <QuantumCursor />
 

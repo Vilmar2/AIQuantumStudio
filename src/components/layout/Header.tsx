@@ -43,24 +43,24 @@ export const Header: React.FC<HeaderProps> = ({
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-[#05070b]/85 backdrop-blur-md border-b border-white/5 py-4'
-            : 'bg-transparent border-b border-transparent py-6'
+            ? 'bg-[#05070b]/85 backdrop-blur-md border-b border-white/5 py-3 sm:py-4'
+            : 'bg-transparent border-b border-transparent py-4 sm:py-6'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           {/* Logo / Brand */}
           <button
             onClick={() => handleLinkClick('home')}
-            className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer"
+            className="flex items-center gap-2.5 sm:gap-3 text-left focus:outline-none group cursor-pointer max-w-[calc(100%-48px)] sm:max-w-none"
           >
-            <div className="w-8 h-8 rounded-sm bg-cyan-400 flex items-center justify-center font-display font-black text-black text-lg tracking-tighter group-hover:bg-cyan-300 transition-colors">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-sm bg-cyan-400 flex items-center justify-center font-display font-black text-black text-base sm:text-lg tracking-tighter group-hover:bg-cyan-300 transition-colors shrink-0">
               Q
             </div>
-            <div>
-              <span className="font-display font-black tracking-wider text-white text-sm sm:text-base uppercase flex items-center gap-1.5">
+            <div className="min-w-0">
+              <span className="font-display font-black tracking-wider text-white text-xs sm:text-base uppercase flex items-center gap-1.5 truncate">
                 AI QUANTUM STUDIO
               </span>
-              <span className="block text-[9px] font-mono text-cyan-400 tracking-[0.2em] uppercase">
+              <span className="block text-[8px] sm:text-[9px] font-mono text-cyan-400 tracking-[0.15em] sm:tracking-[0.2em] uppercase truncate">
                 DIGITAL CRAFT & MINI APPS
               </span>
             </div>

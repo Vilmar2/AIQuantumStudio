@@ -30,9 +30,9 @@ export const SolutionModal: React.FC<SolutionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-lg bg-[#090e17] border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/60 overflow-hidden"
+        className="relative w-full max-w-lg bg-[#090e17] border border-cyan-500/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl shadow-cyan-950/60 overflow-hidden max-h-[94vh] overflow-y-auto my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -79,7 +79,7 @@ export const SolutionModal: React.FC<SolutionModalProps> = ({
                       key={type}
                       type="button"
                       onClick={() => setProjectType(type)}
-                      className={`py-2 px-3 rounded text-xs font-mono tracking-wider transition-all border text-left cursor-pointer ${
+                      className={`py-2 px-2.5 rounded text-[10px] sm:text-xs font-mono tracking-wider transition-all border text-left cursor-pointer truncate ${
                         projectType === type
                           ? 'bg-cyan-400 text-black font-bold border-cyan-400'
                           : 'bg-white/5 text-slate-300 border-white/10 hover:border-white/20'
@@ -121,10 +121,10 @@ export const SolutionModal: React.FC<SolutionModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full mt-2 py-3.5 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs uppercase tracking-widest rounded-lg transition-all cursor-pointer shadow-lg shadow-cyan-400/20 active:scale-[0.98] flex items-center justify-center gap-2"
+                className="w-full mt-2 py-3.5 px-2 bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs uppercase tracking-wider sm:tracking-widest rounded-lg transition-all cursor-pointer shadow-lg shadow-cyan-400/20 active:scale-[0.98] flex items-center justify-center gap-2"
               >
-                <span>ENVIAR CONSULTA POR WHATSAPP</span>
-                <ArrowRight className="w-4 h-4" />
+                <span className="truncate">ENVIAR CONSULTA POR WHATSAPP</span>
+                <ArrowRight className="w-4 h-4 shrink-0" />
               </button>
             </form>
           </div>
