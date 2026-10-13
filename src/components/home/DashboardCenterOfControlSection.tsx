@@ -44,7 +44,7 @@ export const DashboardCenterOfControlSection: React.FC<DashboardCenterOfControlP
           <div className="font-mono text-xs sm:text-sm uppercase tracking-widest text-red-400 mb-2">
             TODO ESTÁ DISPERSO.
           </div>
-          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tight leading-[1.05]">
+          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
             ¿Y SI TODO ESTUVIERA EN UN SOLO LUGAR?
           </h2>
           <p className="mt-4 text-sm sm:text-lg text-slate-300 font-light max-w-xl mx-auto leading-relaxed px-2">

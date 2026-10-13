@@ -32,26 +32,26 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onCreateClick }) => 
       {/* Main Spatial Composition (Editorial + Minimalist) */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center my-auto flex flex-col items-center pointer-events-none select-none w-full">
         {/* Brand Kicker */}
-        <div className="inline-flex items-center gap-2 mb-3 pointer-events-auto">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="text-[10px] sm:text-[11px] uppercase font-mono tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold">
+        <div className="inline-flex items-center gap-2 mb-3.5 px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-400/40 shadow-[0_0_16px_rgba(0,229,255,0.25)] pointer-events-auto backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+          <span className="text-[11px] sm:text-xs uppercase font-mono tracking-[0.25em] sm:tracking-[0.3em] text-cyan-300 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
             ESTUDIO DIGITAL
           </span>
         </div>
 
         {/* Brand Display Title */}
         <h1 
-          className="font-display text-3xl min-[360px]:text-5xl min-[480px]:text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight text-white uppercase leading-[0.92] max-w-full"
+          className="font-display text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white uppercase leading-[0.95] max-w-full"
           style={{ textWrap: 'balance' }}
         >
           AI QUANTUM
-          <span className="block text-slate-400 font-extrabold text-2xl min-[360px]:text-4xl min-[480px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-1">
+          <span className="block font-black text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] mt-1.5 tracking-tight reflective-text-studio">
             STUDIO
           </span>
         </h1>
 
         {/* Headline per Section 07 */}
-        <p className="mt-5 sm:mt-8 text-base sm:text-2xl md:text-3xl lg:text-4xl text-slate-100 font-light max-w-3xl leading-snug tracking-tight px-2">
+        <p className="mt-4 sm:mt-6 text-sm sm:text-lg md:text-xl text-slate-200 font-light max-w-2xl leading-relaxed tracking-tight px-2">
           Convertimos ideas en experiencias digitales.
         </p>
 

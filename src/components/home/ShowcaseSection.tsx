@@ -16,7 +16,7 @@ export const ShowcaseSection: React.FC<ShowcaseSectionProps> = ({ onRequestCusto
           <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
             Exposición Digital
           </span>
-          <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight">
+          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             AI QUANTUM SHOWCASE
           </h2>
           <p className="mt-4 text-sm sm:text-lg text-slate-300 font-light leading-relaxed">

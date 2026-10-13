@@ -79,7 +79,7 @@ export const MiniAppsPage: React.FC<MiniAppsPageProps> = ({
             <Sparkles className="w-3.5 h-3.5" />
             <span>LIVE MINI APP SHOWROOM</span>
           </div>
-          <h1 className="font-display text-4xl sm:text-6xl font-black text-white uppercase tracking-tight">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             MINI APPS EN VIVO
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed font-light">

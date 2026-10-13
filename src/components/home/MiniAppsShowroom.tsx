@@ -58,9 +58,9 @@ export const MiniAppsShowroom: React.FC<MiniAppsShowroomProps> = ({
             <Sparkles className="w-3.5 h-3.5" />
             <span>01. LIVE MINI APP SHOWROOM</span>
           </div>
-          <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
+          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
             PEQUEÑAS HERRAMIENTAS.
-            <span className="block text-slate-400 font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl mt-1">
+            <span className="block text-slate-400 font-extrabold text-xl min-[380px]:text-2xl sm:text-3xl md:text-4xl mt-1">
               GRANDES POSIBILIDADES.
             </span>
           </h2>

@@ -26,10 +26,10 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold">
             Academia & Formación de Vanguardia
           </span>
-          <h1 className="mt-2 font-display text-4xl sm:text-6xl font-black text-white uppercase tracking-tight">
+          <h1 className="mt-2 font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             AI QUANTUM ACADEMY
           </h1>
-          <div className="mt-3 text-xl font-bold uppercase tracking-wider text-slate-300">
+          <div className="mt-3 text-lg md:text-xl font-bold uppercase tracking-wider text-slate-300">
             APRENDER IA TAMBIÉN ES CREAR.
           </div>
           <p className="mt-4 text-base sm:text-lg text-slate-400 leading-relaxed">
@@ -44,7 +44,7 @@ export const AcademyPage: React.FC<AcademyPageProps> = ({
               <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 block mb-1">
                 Convocatoria Oficial
               </span>
-              <h2 className="font-display text-3xl sm:text-5xl font-black text-white uppercase">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase">
                 IA APLICADA 2026
               </h2>
               <p className="mt-2 text-slate-300 text-sm md:text-base max-w-xl leading-relaxed">

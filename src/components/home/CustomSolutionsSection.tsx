@@ -41,9 +41,9 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
           <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-3">
             03. Soluciones Digitales
           </span>
-          <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.02]">
+          <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
             TU PROBLEMA.
-            <span className="block text-slate-400 font-extrabold text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl mt-1">
+            <span className="block text-slate-400 font-extrabold text-xl min-[380px]:text-2xl sm:text-3xl md:text-4xl mt-1">
               UNA EXPERIENCIA DISEÑADA A MEDIDA.
             </span>
           </h2>
@@ -105,7 +105,7 @@ export const CustomSolutionsSection: React.FC<CustomSolutionsSectionProps> = ({ 
                 <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold block mb-1">
                   Inicio del Proyecto
                 </span>
-                <h3 className="font-display text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+                <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
                   ¿QUÉ NECESITÁS RESOLVER?
                 </h3>
               </div>

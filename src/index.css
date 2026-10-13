@@ -149,3 +149,34 @@ h1, h2, h3, .font-display {
 .animate-page-jump {
   animation: pageJump 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* Reflective high-brilliance effect (Reflectario con brillo) */
+@keyframes reflectiveShine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.reflective-text-studio {
+  background: linear-gradient(
+    115deg,
+    #cffafe 0%,
+    #ffffff 22%,
+    #38bdf8 42%,
+    #ffffff 58%,
+    #67e8f9 78%,
+    #ffffff 92%,
+    #00e5ff 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: reflectiveShine 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.75))
+          drop-shadow(0 0 32px rgba(56, 189, 248, 0.5));
+}

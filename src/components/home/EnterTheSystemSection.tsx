@@ -66,7 +66,7 @@ export const EnterTheSystemSection: React.FC<EnterTheSystemSectionProps> = ({ on
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
             ENTER THE SYSTEM
           </div>
-          <h2 className="font-display text-4xl sm:text-6xl font-black text-white uppercase tracking-tight leading-[1.05]">
+          <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
             TODO ESTÁ{' '}
             <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
               CONECTADO.

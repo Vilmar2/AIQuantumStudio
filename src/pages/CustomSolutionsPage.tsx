@@ -39,7 +39,7 @@ export const CustomSolutionsPage: React.FC<CustomSolutionsPageProps> = ({
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold">
             Laboratorio de Proyectos
           </span>
-          <h1 className="mt-2 font-display text-4xl sm:text-6xl font-black text-white uppercase tracking-tight">
+          <h1 className="mt-2 font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             SOLUCIONES PERSONALIZADAS
           </h1>
           <div className="mt-3 text-xl font-bold uppercase tracking-wider text-slate-300">

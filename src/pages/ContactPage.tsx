@@ -39,7 +39,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold">
             Canales Oficiales
           </span>
-          <h1 className="mt-2 font-display text-4xl sm:text-6xl font-black text-white uppercase tracking-tight">
+          <h1 className="mt-2 font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             CONTACTO DIRECTO
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed">

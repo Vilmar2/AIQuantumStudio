@@ -60,7 +60,7 @@ export const PathSelectorSection: React.FC<PathSelectorSectionProps> = ({ onSele
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold">
             02. Selector de Navegación
           </span>
-          <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight uppercase">
+          <h2 className="mt-3 font-display text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase">
             ¿QUÉ QUERÉS CREAR?
           </h2>
           <p className="mt-4 text-slate-400 text-base md:text-lg">

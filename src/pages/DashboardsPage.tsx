@@ -29,7 +29,7 @@ export const DashboardsPage: React.FC<DashboardsPageProps> = ({
           <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-cyan-400 font-semibold block mb-2">
             Showroom de Dashboards
           </span>
-          <h1 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl font-black text-white uppercase tracking-tight">
+          <h1 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
             CENTRO DE CONTROL
           </h1>
           <p className="mt-4 text-sm sm:text-lg text-slate-300 font-light leading-relaxed">

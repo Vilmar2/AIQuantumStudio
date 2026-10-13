@@ -27,7 +27,7 @@ export const DashboardsShowroom: React.FC<DashboardsShowroomProps> = ({
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-blue-400 font-semibold">
               04. Inteligencia de Datos
             </span>
-            <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight uppercase leading-[1.05]">
+            <h2 className="mt-3 font-display text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-[1.05]">
               DASHBOARDS
             </h2>
             <div className="mt-3 text-lg md:text-xl font-bold uppercase tracking-wider text-slate-300">

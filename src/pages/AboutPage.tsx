@@ -27,7 +27,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <span className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold block mb-2">
             DETRÁS DE AI QUANTUM STUDIO
           </span>
-          <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-tight">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-tight">
             CONVERTIMOS IDEAS Y PROBLEMAS REALES EN SOLUCIONES DIGITALES.
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-300 font-light leading-relaxed">

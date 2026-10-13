@@ -18,7 +18,7 @@ export const UniverseSection: React.FC<UniverseSectionProps> = ({ onNavigateToCa
           <div className="text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 font-semibold mb-3">
             01. Ecosistema Digital
           </div>
-          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight uppercase leading-[1.1]">
+          <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-[1.1]">
             UN UNIVERSO DE{' '}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               POSIBILIDADES.

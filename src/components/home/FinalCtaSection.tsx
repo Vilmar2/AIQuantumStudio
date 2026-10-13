@@ -30,7 +30,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({
         </span>
 
         {/* 25. Headline */}
-        <h2 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.05]">
+        <h2 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
           ¿QUÉ QUERÉS CREAR?
         </h2>
 

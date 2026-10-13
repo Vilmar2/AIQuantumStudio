@@ -42,7 +42,7 @@ export const ConvergenceSection: React.FC = () => {
           AI QUANTUM STUDIO
         </div>
 
-        <h3 className="font-display text-3xl min-[380px]:text-4xl sm:text-6xl md:text-7xl font-black text-white uppercase tracking-tight">
+        <h3 className="font-display text-2xl min-[380px]:text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
           TODO COMIENZA CON UNA IDEA.
         </h3>
 
